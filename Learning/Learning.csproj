@@ -56,7 +56,8 @@
     <Compile Include="FindPath.cs" />
     <Compile Include="BinaryTree.cs" />
     <Compile Include="ReverseString.cs" />
-    <Compile Include="PivotLinkedList.cs" />
+    <Compile Include="LinkedList.cs" />
+    <Compile Include="StackQueue.cs" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
