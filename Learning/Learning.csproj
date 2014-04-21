@@ -58,6 +58,7 @@
     <Compile Include="ReverseString.cs" />
     <Compile Include="LinkedList.cs" />
     <Compile Include="StackQueue.cs" />
+    <Compile Include="TowersOfHanoi.cs" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

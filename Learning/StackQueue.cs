@@ -10,7 +10,7 @@ namespace UnitTestProject1 {
             stack.Push(2);
             Assert.AreEqual(2, (int)stack.Peek());
             Assert.AreEqual(2, (int)stack.Pop());
-            Assert.IsNull(stack.Peek());
+            Assert.AreEqual(0, stack.Peek());
             Assert.AreEqual(0, stack.Pop());
         }
 
@@ -26,7 +26,7 @@ namespace UnitTestProject1 {
             Assert.AreEqual(3, (int)stack.Pop());
             Assert.AreEqual(1, (int)stack.Peek());
             Assert.AreEqual(1, (int)stack.Pop());
-            Assert.IsNull(stack.Peek());
+            Assert.AreEqual(0, stack.Peek());
             Assert.AreEqual(0, stack.Pop());
         }
 
@@ -42,7 +42,8 @@ namespace UnitTestProject1 {
 
         [TestMethod]
         public void TestMinAfterPop() {
-            var stack = new MyStack<int>(null);
+            var minStack = new MyStack<int>(null);
+            var stack = new MyStack<int>(minStack);
             stack.Push(2);
             stack.Push(1);
             stack.Push(3);
@@ -62,7 +63,7 @@ namespace UnitTestProject1 {
         public T Min {
             get { return minStack.Peek(); }
             private set {
-                if (minStack.Peek().CompareTo(default(T)) >= 0) {
+                if (minStack.Peek().CompareTo(default(T)) == 0 || minStack.Peek().CompareTo(this.top.Data) > 0) {
                     minStack.Push(value);
                 }
             }
@@ -72,7 +73,8 @@ namespace UnitTestProject1 {
             var newNode = new Node<T>(data, null);
             newNode.NextNode = top;
             top = newNode;
-            Min = top.Data;
+            if(minStack != null)
+                Min = top.Data;
         }
 
         public T Pop() {
@@ -80,7 +82,7 @@ namespace UnitTestProject1 {
                 var obj = top;
                 top = obj.NextNode;
                 obj.NextNode = null;
-                if (minStack.Peek().CompareTo(obj.Data) == 0) {
+                if (minStack != null && minStack.Peek().CompareTo(obj.Data) == 0) {
                     minStack.Pop();
                 }
                 return obj.Data;
