@@ -55,6 +55,7 @@
     <Compile Include="Array\StringFromCharMatrix.cs" />
     <Compile Include="Array\FindPath.cs" />
     <Compile Include="StackQueue\QueueUsingStacks.cs" />
+    <Compile Include="StackQueue\MultiStack.cs" />
     <Compile Include="Tree\BinaryTree.cs" />
     <Compile Include="Array\ReverseString.cs" />
     <Compile Include="LinkedList\LinkedList.cs" />
