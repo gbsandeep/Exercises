@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Learning.StackQueue {
     [TestClass]
@@ -9,57 +10,69 @@ namespace Learning.StackQueue {
         public void TestMethod1() {
             var sortWithStack = new SortWithStack<int>(new int[] { 2, 4, 1, 3});
             sortWithStack.Sort();
+            SortAndCompare(sortWithStack, new List<int> { 1, 2, 3, 4 });
+        }
+
+        [TestMethod]
+        public void ZeroElements() {
+            var sortWithStack = new SortWithStack<int>(new int[] { });
+            SortAndCompare(sortWithStack, new List<int> { });
+        }
+
+        [TestMethod]
+        public void OneElement() {
+            var sortWithStack = new SortWithStack<int>(new int[] { 1 });
+            SortAndCompare(sortWithStack, new List<int> { 1 });
+        }
+
+        private static void SortAndCompare(SortWithStack<int> sortWithStack, List<int> expectedSortedList) {
+            sortWithStack.Sort();
+            var actualSortedList = sortWithStack.ConvertStackToList();
+            var expectedDiffActual = expectedSortedList.Except(actualSortedList);
+            var actualDiffExpected = actualSortedList.Except(expectedSortedList);
+            Assert.AreEqual(0, expectedDiffActual.Count());
+            Assert.AreEqual(0, actualDiffExpected.Count());
         }
     }
 
     public class SortWithStack<T> where T : IComparable<T> {
-        Stack<T> main;
-        Stack<T> temp;
+        Stack<T> initialStack;
+        Stack<T> sortedStack;
         public SortWithStack(T[] data) {
-            main = new Stack<T>();
+            initialStack = new Stack<T>();
             foreach (var value in data) {
-                main.Push(value);
+                initialStack.Push(value);
             }
         }
 
         public void Sort() {
-            if (main == null || main.Count <= 1) return;
-            if (temp == null && main.Count > 1) {
-                temp = new Stack<T>();
+            if (initialStack == null || initialStack.Count < 1) return;
+            if (sortedStack == null) sortedStack = new Stack<T>();
+            while (initialStack.Count > 0) {
+                var element = initialStack.Pop();
+                var notInserted = true;
+                while (notInserted) {
+                    if (sortedStack.Count == 0 || sortedStack.Peek().CompareTo(element) >= 0) {
+                        sortedStack.Push(element);
+                        notInserted = false;
+                    }
+                    else {
+                        var element2 = sortedStack.Pop();
+                        initialStack.Push(element2);
+                    }
+                }
             }
-            var notSorted = true;
-            do {
-                notSorted = SingleSort(main, temp);
-                SwapStacks(main, temp);
-            }
-            while (notSorted);
-            if (main.Count == 0) SwapStacks(main, temp);
         }
 
-        void SwapStacks(Stack<T> t1, Stack<T> t2) {
-            var t = t1;
-            t1 = t2;
-            t2 = t;
-        }
-
-        bool SingleSort(Stack<T> t1, Stack<T> t2) {
-            bool notSorted = false;
-            while (t1.Count > 0) {
-                var val1 = t1.Pop();
-                notSorted |= PopAndPushTop(t2, val1);
+        public List<T> ConvertStackToList() {
+            var list = new List<T>();
+            while (sortedStack != null && sortedStack.Count > 0) {
+                list.Add(sortedStack.Pop());
             }
-            return notSorted;
-        }
-
-        bool PopAndPushTop(Stack<T> stack, T element) {
-            bool swap = false;
-            var top = default(T);
-            if (stack.Count > 0) {
-                if(stack.Peek() 
-                top = stack.Pop();
+            for (int index = list.Count - 1; index >= 0; index--) {
+                sortedStack.Push(list[index]);
             }
-
-            return swap;
+            return list;
         }
     }
 }
