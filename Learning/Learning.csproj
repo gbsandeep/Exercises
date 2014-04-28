@@ -62,6 +62,7 @@
     <Compile Include="LinkedList\LinkedList.cs" />
     <Compile Include="StackQueue\StackQueue.cs" />
     <Compile Include="StackQueue\TowersOfHanoi.cs" />
+    <Compile Include="Graph\DirectedGraph.cs" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
