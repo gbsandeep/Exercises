@@ -8,7 +8,7 @@ namespace Learning {
         [TestMethod]
         public void SingleNode() {
             var source = new Node<string>("a");
-            Assert.AreEqual(true, DirectedGraph<string>.RouteExists(source, source));
+            Assert.AreEqual(true, DirectedGraph<string>.RouteExistsDFS(source, source));
         }
 
         [TestMethod]
@@ -18,7 +18,7 @@ namespace Learning {
             var node3 = new Node<string>("c");
             node1.Neighbors.Add(node2);
             node2.Neighbors.Add(node3);
-            Assert.AreEqual(true, DirectedGraph<string>.RouteExists(node1, node3));
+            Assert.AreEqual(true, DirectedGraph<string>.RouteExistsDFS(node1, node3));
         }
 
         [TestMethod]
@@ -29,7 +29,7 @@ namespace Learning {
             node1.Neighbors.Add(node2);
             node2.Neighbors.Add(node3);
             node3.Neighbors.Add(node1);
-            Assert.AreEqual(true, DirectedGraph<string>.RouteExists(node1, node3));
+            Assert.AreEqual(true, DirectedGraph<string>.RouteExistsDFS(node1, node3));
         }
         [TestMethod]
         public void NoPath() {
@@ -38,7 +38,7 @@ namespace Learning {
             var node3 = new Node<string>("c");
             node1.Neighbors.Add(node2);
             node2.Neighbors.Add(node3);
-            Assert.AreEqual(false, DirectedGraph<string>.RouteExists(node3, node1));
+            Assert.AreEqual(false, DirectedGraph<string>.RouteExistsDFS(node3, node1));
         }
     }
 
@@ -56,15 +56,16 @@ namespace Learning {
     }
 
     class DirectedGraph<T> where T: IComparable {
-        public static bool RouteExists(Node<T> source, Node<T> destination) {
+        public static bool RouteExistsDFS(Node<T> source, Node<T> destination) {
             var routeExists = false;
             source.Visited = true;
+            Console.WriteLine(source.Value);
             if(source.Value.CompareTo(destination.Value) == 0) {
                 routeExists = true;
             } else if(source.Neighbors != null) {
                 foreach(var neighbor in source.Neighbors) {
                     if(neighbor.Visited == false) {
-                        routeExists |= DirectedGraph<T>.RouteExists(neighbor, destination);
+                        routeExists |= DirectedGraph<T>.RouteExistsDFS(neighbor, destination);
                         if(routeExists) break;
                     }
                 }
