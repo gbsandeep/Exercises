@@ -17,6 +17,18 @@ namespace UnitTestProject1 {
             var bt = new BinaryTree(root);
             Assert.AreEqual(false, bt.IsBalanced());
         }
+
+        [TestMethod]
+        public void CommonAncestor() {
+            var root = new Node('a', new Node('b', new Node('d', null, null), new Node('e', new Node('f', null, null), null)), new Node('c', null, null));
+            var bt = new BinaryTree(root);
+            bt.FindCommonAncestor('e', 'c');
+            Assert.AreEqual('a', bt.CommonAncestor.Value);
+            bt.FindCommonAncestor('e', 'd');
+            Assert.AreEqual('b', bt.CommonAncestor.Value);
+            bt.FindCommonAncestor('f', 'd');
+            Assert.AreEqual('b', bt.CommonAncestor.Value);
+        }
     }
 
     class Node {
@@ -52,5 +64,19 @@ namespace UnitTestProject1 {
             return Math.Max(leftDepth, rightDepth) + 1;
         }
 
+        public Node CommonAncestor { get; private set; }
+        public void FindCommonAncestor(char node1, char node2) {
+            CommonAncestor = null;
+            RecursiveCommonAncestor(root, node1, node2);
+        }
+        int RecursiveCommonAncestor(Node node, char node1, char node2) {
+            var found = 0;
+            if (node == null) return found;
+            if (node.Left != null) { found += RecursiveCommonAncestor(node.Left, node1, node2); }
+            if (node.Left != null) {found += RecursiveCommonAncestor(node.Right, node1, node2);}
+            if (found == 2 && CommonAncestor == null) CommonAncestor = node;
+            if (node.Value == node1 || node.Value == node2) found +=1;
+            return found;
+        }
     }
 }
